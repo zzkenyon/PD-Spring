@@ -1,0 +1,22 @@
+<web-app>
+    <display-name>Archetype Created Web Application</display-name>
+    <!--springmvc的核心控制器-->
+    <servlet>
+        <servlet-name>dispatcherServlet</servlet-name>
+        <servlet-class>com.pd.servlet.PDDispatcherServlet</servlet-class>
+
+        <!--配置servlet的初始化参数，读取springMVC的配置文件，创建spring容器-->
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>spring.properties</param-value>
+        </init-param>
+
+        <!--配置servlet启动时加载对象-->
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dispatcherServlet</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+</web-app>
