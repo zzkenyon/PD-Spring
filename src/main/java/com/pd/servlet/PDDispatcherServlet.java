@@ -61,7 +61,8 @@ public class PDDispatcherServlet extends HttpServlet {
         Map<String,String[]> paramsMap = req.getParameterMap();
         Method method = handlerMapping.get(uri);
         String beanName = toFirstLowerCase(method.getDeclaringClass().getSimpleName());
-        method.invoke(ioc.get(beanName),new Object[]{req,resp,paramsMap.get("name")[0]});
+        Object res = method.invoke(ioc.get(beanName),new Object[]{req,resp,paramsMap.get("name")[0]});
+        resp.getWriter().write(res.toString());
     }
 
     @Override
