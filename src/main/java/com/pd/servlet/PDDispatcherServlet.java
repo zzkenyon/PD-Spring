@@ -30,7 +30,12 @@ public class PDDispatcherServlet extends HttpServlet {
     private Map<String, Method> handlerMapping = new HashMap<>();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
+        try {
+            doDispatch(req,resp);
+        } catch (Exception e) {
+            e.getStackTrace();
+            resp.getWriter().write("500 exception");
+        }
     }
 
     @Override
@@ -56,7 +61,7 @@ public class PDDispatcherServlet extends HttpServlet {
         Map<String,String[]> paramsMap = req.getParameterMap();
         Method method = handlerMapping.get(uri);
         String beanName = toFirstLowerCase(method.getDeclaringClass().getSimpleName());
-        method.invoke(null,new Object[]{req,resp,paramsMap.get("name")[0]});
+        method.invoke(ioc.get(beanName),new Object[]{req,resp,paramsMap.get("name")[0]});
     }
 
     @Override
@@ -160,8 +165,8 @@ public class PDDispatcherServlet extends HttpServlet {
         if(ioc.isEmpty()) {return;}
         for(Map.Entry<String,Object> entry : ioc.entrySet()){
             Class<?> clazz = entry.getValue().getClass();
-            String url = "/" + clazz.getAnnotation(PDRequestMapping.class).value();
             if(!clazz.isAnnotationPresent(PDController.class)){continue;}
+            String url = "/" + clazz.getAnnotation(PDRequestMapping.class).value();
             for(Method method : clazz.getMethods()){
                 if(!method.isAnnotationPresent(PDRequestMapping.class)){continue;}
                 PDRequestMapping requestMapping = method.getAnnotation(PDRequestMapping.class);

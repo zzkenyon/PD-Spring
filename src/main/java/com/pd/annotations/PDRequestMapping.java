@@ -1,8 +1,6 @@
 package com.pd.annotations;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * @description: spring
@@ -11,6 +9,7 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.TYPE,ElementType.METHOD})
 @Inherited
+@Retention(RetentionPolicy.RUNTIME)
 public @interface PDRequestMapping {
     String value() default "";
 }
