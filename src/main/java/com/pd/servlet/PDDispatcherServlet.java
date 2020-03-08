@@ -55,6 +55,7 @@ public class PDDispatcherServlet extends HttpServlet {
         uri = uri.replaceAll(contextPath,"").replaceAll("/+","/");
 
         if(!this.handlerMapping.containsKey(uri)){
+
             resp.getWriter().write("404 not found");
             return;
         }
