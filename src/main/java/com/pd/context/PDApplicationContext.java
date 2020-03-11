@@ -27,7 +27,7 @@ public class PDApplicationContext {
         try {
             //1 读取配置文件
             reader = new PDBeanDefinitionReader(configLocation);
-            //2 解析1配置文件，将配置信息封装成BeanDefinition
+            //2 解析配置文件，将配置信息封装成BeanDefinition
             List<PDBeanDefinition> beanDefinitions = reader.loadBeanDefinitions();
             //3 将BeanDefinition 保存到一个缓存配置的容器，key应该是和IOC容器的beanName的Key相对应
             doRegisterBeanDefinition(beanDefinitions);
@@ -39,8 +39,8 @@ public class PDApplicationContext {
     }
 
     private void doAutowire() {
-        for(Map.Entry<String,PDBeanDefinition> stringPDBeanDefinitionEntry : this.beanDefinitionMap.entrySet()){
-            String beanName = stringPDBeanDefinitionEntry.getKey();
+        for(Map.Entry<String,PDBeanDefinition> beanDefinitionMapEntry : this.beanDefinitionMap.entrySet()){
+            String beanName = beanDefinitionMapEntry.getKey();
             getBean(beanName);
         }
 
@@ -60,7 +60,7 @@ public class PDApplicationContext {
         //1 拿到BeanDefinition
         PDBeanDefinition beanDefinition = this.beanDefinitionMap.get(beanName);
 
-        //2 创建出真正的1实例对象
+        //2 创建出真正的实例对象
         Object instance = instantBean(beanName,beanDefinition);
 
         //3 把创建出来的对象实例封装成BeanWrapper
@@ -72,6 +72,19 @@ public class PDApplicationContext {
         //5 依赖注入
         populateBean(beanName,new PDBeanDefinition(),wrapper);
         return this.factoryBeanInstanceCache.get(beanName).getWrapperInstance();
+    }
+
+    private Object instantBean(String beanName, PDBeanDefinition beanDefinition) {
+        String className = beanDefinition.getBeanClassName();
+        Object instance = null;
+        try {
+            Class<?> clazz = Class.forName(className);
+            instance = clazz.newInstance();
+            this.factoryBeanObjectCache.put(beanName,instance);
+        }catch (Exception e){
+            e.getStackTrace();
+        }
+        return instance;
     }
 
     private void populateBean(String beanName, PDBeanDefinition pdBeanDefinition, PDBeanWrapper wrapper) {
@@ -102,18 +115,7 @@ public class PDApplicationContext {
         }
     }
 
-    private Object instantBean(String beanName, PDBeanDefinition beanDefinition) {
-        String className = beanDefinition.getBeanClassName();
-        Object instance = null;
-        try {
-            Class<?> clazz = Class.forName(className);
-            instance = clazz.newInstance();
-            this.factoryBeanObjectCache.put(beanName,instance);
-        }catch (Exception e){
-            e.getStackTrace();
-        }
-        return instance;
-    }
+
 
     public Object getBean(Class beanClass){
         return getBean(beanClass.getName());

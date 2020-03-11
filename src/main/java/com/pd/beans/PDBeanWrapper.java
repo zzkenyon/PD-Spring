@@ -6,8 +6,10 @@ package com.pd.beans;
  * @date 2020-3-8 21:05
  */
 public class PDBeanWrapper {
+
     private Object wrapperInstance;
     private Class<?> wrapperClass;
+
     public PDBeanWrapper(Object instance) {
         this.wrapperInstance = instance;
         this.wrapperClass = instance.getClass();

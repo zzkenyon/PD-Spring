@@ -23,11 +23,10 @@ public class PDBeanDefinitionReader {
     public PDBeanDefinitionReader(String locations){
         //1 定位并加载配置文件
         doLoadConfig(locations);
-        //2 扫描
+        //2 扫描指定路径上的类，保存beanName
         doScanner(configContext.getProperty("scanPackage"));
-        //3 解析配置，将配置文件内容解析为BeanDefinition
-
     }
+
     private void doLoadConfig(String contextConfigLocation){
         try(InputStream is = this.getClass().getClassLoader().
                 getResourceAsStream(contextConfigLocation)){
