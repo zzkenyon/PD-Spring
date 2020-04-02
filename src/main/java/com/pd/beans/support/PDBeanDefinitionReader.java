@@ -17,12 +17,15 @@ import java.util.Properties;
  * @date 2020-3-8 21:06
  */
 public class PDBeanDefinitionReader {
+    /**
+     * 配置文件位置
+     */
     private Properties configContext = new Properties();
     private List<String> registryBeanClasses = new ArrayList<>();
 
-    public PDBeanDefinitionReader(String locations){
+    public PDBeanDefinitionReader(String ... configLocations){
         //1 定位并加载配置文件
-        doLoadConfig(locations);
+        doLoadConfig(configLocations[0]);
         //2 扫描指定路径上的类，保存beanName
         doScanner(configContext.getProperty("scanPackage"));
     }
@@ -55,16 +58,18 @@ public class PDBeanDefinitionReader {
     public List<PDBeanDefinition> loadBeanDefinitions(){
         List<PDBeanDefinition> res = new ArrayList<>();
         try{
-            for(String className : registryBeanClasses){
-                Class<?> clazz = Class.forName(className);
-                if(clazz.isInterface()){
+            for(String beanClassName : registryBeanClasses){
+                Class<?> beanClazz = Class.forName(beanClassName);
+                if(beanClazz.isInterface()){
                     continue;
                 }
-                // 默认名 类名首字母小写
-                res.add(doCreateBeanDefinition(toFirstLowerCase(clazz.getSimpleName()),clazz.getName()));
-                // 接口
-                for (Class<?> iClazz : clazz.getInterfaces()){
-                    res.add(doCreateBeanDefinition(iClazz.getName(),clazz.getName()));
+                // 1、默认名 类名首字母小写
+                res.add(doCreateBeanDefinition(toFirstLowerCase(beanClazz.getSimpleName()),beanClazz.getName()));
+                // 2、自定义
+
+                // 3、接口
+                for (Class<?> i : beanClazz.getInterfaces()){
+                    res.add(doCreateBeanDefinition(i.getName(),beanClazz.getName()));
                 }
             }
         }catch (Exception e){

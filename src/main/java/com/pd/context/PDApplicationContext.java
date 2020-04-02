@@ -13,25 +13,30 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 职责：完成bean创建和di
  * @author zhaozhengkang
  * @description
  * @date 2020-3-8 21:03
  */
 public class PDApplicationContext {
+
+    /**
+     * 配置文件解析器
+     */
     private PDBeanDefinitionReader reader;
     private Map<String, PDBeanDefinition> beanDefinitionMap = new HashMap<>();
     private Map<String,PDBeanWrapper>  factoryBeanInstanceCache = new HashMap<>();
     private Map<String,Object> factoryBeanObjectCache = new HashMap<>();
 
-    public PDApplicationContext(String configLocation){
+    public PDApplicationContext(String ... configLocations){
         try {
             //1 读取配置文件
-            reader = new PDBeanDefinitionReader(configLocation);
+            reader = new PDBeanDefinitionReader(configLocations);
             //2 解析配置文件，将配置信息封装成BeanDefinition
             List<PDBeanDefinition> beanDefinitions = reader.loadBeanDefinitions();
             //3 将BeanDefinition 保存到一个缓存配置的容器，key应该是和IOC容器的beanName的Key相对应
             doRegisterBeanDefinition(beanDefinitions);
-            //4 完成依赖注入
+            //4 完成依赖注入，如果延时加载，这一步不会发生
             doAutowire();
         }catch(Exception e){
             e.getStackTrace();
@@ -39,6 +44,7 @@ public class PDApplicationContext {
     }
 
     private void doAutowire() {
+        //调用getbean
         for(Map.Entry<String,PDBeanDefinition> beanDefinitionMapEntry : this.beanDefinitionMap.entrySet()){
             String beanName = beanDefinitionMapEntry.getKey();
             getBean(beanName);

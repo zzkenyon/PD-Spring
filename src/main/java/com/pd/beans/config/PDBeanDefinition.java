@@ -1,7 +1,5 @@
 package com.pd.beans.config;
 
-import com.pd.beans.PDBeanWrapper;
-
 /**
  * @author zhaozhengkang
  * @description
@@ -18,12 +16,12 @@ public class PDBeanDefinition {
         this.factoryBeanName = factoryBeanName;
     }
     /**
-     * 在IOC容器中的key
+     * 在IOC容器中的key  clazz.getSimpleName()
      */
     private String factoryBeanName;
 
     /**
-     * 全类名
+     * 全类名 clazz.getName()
      */
     private String beanClassName;
 

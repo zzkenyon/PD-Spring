@@ -14,6 +14,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 /**
+ * 职责：委派模式，负责分发请求
  * @author zhaozhengkang
  * @description
  * @date 2020-3-8 21:13
