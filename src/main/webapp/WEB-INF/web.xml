@@ -3,7 +3,7 @@
     <!--springmvc的核心控制器-->
     <servlet>
         <servlet-name>dispatcherServlet</servlet-name>
-        <servlet-class>com.pd.servlet.PDDispatcherServlet_2</servlet-class>
+        <servlet-class>com.pd.spring.framework.webmvc.servlet.PDDispatcherServlet_3</servlet-class>
 
         <!--配置servlet的初始化参数，读取springMVC的配置文件，创建spring容器-->
         <init-param>
