@@ -44,7 +44,7 @@ public class MyAction {
 			String result = modifyService.add(name, addr);
 			return out(response,result);
 		}catch (Throwable e){
-			Map<String, String> model = new HashMap<String, String>();
+			Map<String, String> model = new HashMap<>();
 			model.put("detail",e.getCause().getMessage());
 			model.put("stackTrace", Arrays.toString(e.getStackTrace()));
 			return new PDModelAndView("500",model);

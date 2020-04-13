@@ -35,8 +35,7 @@ public class PDBeanDefinitionReader {
     }
 
     private void doLoadConfig(String contextConfigLocation){
-        try(InputStream is = this.getClass().getClassLoader().
-                getResourceAsStream(contextConfigLocation)){
+        try(InputStream is = this.getClass().getClassLoader().getResourceAsStream(contextConfigLocation)){
             contextConfig.load(is);
         }catch (IOException e){
             e.getStackTrace();

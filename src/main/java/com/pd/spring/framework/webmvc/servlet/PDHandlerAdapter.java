@@ -15,10 +15,11 @@ import java.util.Map;
  * @date 2020-4-2 20:35
  */
 public class PDHandlerAdapter {
+
     public PDModelAndView handle(HttpServletRequest req, HttpServletResponse resp, PDHandlerMapping handler)
             throws Exception{
-        //1、拼接形参列表
-        // 将controller方法上的参数名对应的位置保存下来
+        //==========================1、拼接形参列表=========================
+        // 首先处理@RequestParam注解的参数
         Map<String,Integer> paramIndexMapping = new HashMap<>();
         Annotation[][] pa = handler.getMethod().getParameterAnnotations();
         for(int i = 0; i<pa.length; i++){
@@ -31,7 +32,7 @@ public class PDHandlerAdapter {
                 }
             }
         }
-        //初始化一下
+        //然后处理HttpServletRequest 和 HttpServletResponse
         Class<?>[] paramTypes = handler.getMethod().getParameterTypes();
         for(int i = 0; i < paramTypes.length; i++){
             Class<?> clazz = paramTypes[i];
@@ -39,12 +40,15 @@ public class PDHandlerAdapter {
                 paramIndexMapping.put(clazz.getName(),i);
             }
         }
+        //========================以上完成了形参列表的位置映射==========================
 
 
+        // ====================2. 将实参保存到数组的指定位置==========================
         // 从request上获取对应url的参数
         Map<String,String[]> paramMap = req.getParameterMap();
-        // 保存实参
+        // new一个数组来保存实参
         Object[] paramValues = new Object[paramTypes.length];
+        //处理url中带的参数
         for(Map.Entry<String,String[]> param : paramMap.entrySet()){
             String value = Arrays.toString(paramMap.get(param.getKey()))
                     .replaceAll("\\[|\\]","")
@@ -55,6 +59,7 @@ public class PDHandlerAdapter {
             Integer index = paramIndexMapping.get(param.getKey());
             paramValues[index] = caseStringValue(value,paramTypes[index]);
         }
+        //处理request 和 response参数
         if(paramIndexMapping.containsKey(HttpServletRequest.class.getName())){
             int index = paramIndexMapping.get(HttpServletRequest.class.getName());
             paramValues[index] = req;
@@ -63,10 +68,12 @@ public class PDHandlerAdapter {
             int index = paramIndexMapping.get(HttpServletResponse.class.getName());
             paramValues[index] = resp;
         }
+        //调用
         Object res = handler.getMethod().invoke(handler.getController(),paramValues);
         if(res == null || res instanceof Void) {
             return null;
         }
+
         boolean isModelAndView = handler.getMethod().getReturnType() == PDModelAndView.class;
         if(isModelAndView){
             return (PDModelAndView)res;

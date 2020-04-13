@@ -22,6 +22,13 @@ public class PDView {
         this.viewFile = templateFile;
     }
 
+    /**
+     * 渲染
+     * @param model
+     * @param req
+     * @param resp
+     * @throws Exception
+     */
     public void render(Map<String,?> model, HttpServletRequest req, HttpServletResponse resp) throws Exception{
         StringBuffer sb = new StringBuffer();
         RandomAccessFile ra = new RandomAccessFile(this.viewFile,"r");
