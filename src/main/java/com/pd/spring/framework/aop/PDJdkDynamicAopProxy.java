@@ -28,6 +28,9 @@ public class PDJdkDynamicAopProxy implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         Map<String, PDAdvice> advices = config.getAdvices(method,null);
         Object returnValue;
+        if(advices == null){
+            return method.invoke(this.config.getTarget(),args);
+        }
         try{
             invokeAdvice(advices.get("before"));
             returnValue = method.invoke(this.config.getTarget(),args);

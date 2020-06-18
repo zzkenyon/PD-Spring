@@ -6,5 +6,6 @@ package com.pd.demo.service;
  * @date: 2020-02-05 18:45
  */
 public interface IDemoService {
-    String printName(String name);
+    String printName(String name,int age);
+    String printName_2(String name);
 }

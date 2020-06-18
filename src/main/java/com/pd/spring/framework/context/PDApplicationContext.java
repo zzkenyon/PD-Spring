@@ -94,7 +94,7 @@ public class PDApplicationContext {
         Object instance = null;
         try {
             Class<?> clazz = Class.forName(className);
-            instance = clazz.newInstance();
+            instance = clazz.getConstructor().newInstance();
             //==================AOP开始====================
             //1、加载AOP配置文件
             PDAdvisedSupport config = instantiationAopConfig(beanDefinition);

@@ -17,10 +17,8 @@ import java.util.regex.Pattern;
  */
 public class PDAdvisedSupport {
     private PDAopConfig config;
-
     private Object target;
     private Class targetClass;
-
     private Pattern pointCutClassPattern;
     /**
      * Method 为目标类方法，Map<String, PDAdvice>为aop配置中解析出来的切面信息
@@ -89,9 +87,11 @@ public class PDAdvisedSupport {
                 .replaceAll("\\(", "\\\\(")
                 .replaceAll("\\)", "\\\\)");
         //切面的正则表达式为 public .* com\.gupaoedu\.vip\.demo\.service\..*Service\..*\(.*\)
-        String pointCutForClassRegex = pointCut.substring(0, pointCut.lastIndexOf("\\(") - 4);
+        String pointCutForClassRegex = pointCut.substring(0, pointCut.lastIndexOf("\\("));
+        pointCutForClassRegex = pointCutForClassRegex.substring(0,pointCutForClassRegex.lastIndexOf("\\."));
         //拿到类的匹配模式
         pointCutClassPattern = Pattern.compile("class " + pointCutForClassRegex.substring(pointCut.lastIndexOf(" ") + 1));
+
         //创建享元的共享池
         methodCache = new HashMap<>();
         //匹配方法的正则

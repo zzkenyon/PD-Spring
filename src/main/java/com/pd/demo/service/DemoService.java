@@ -1,6 +1,5 @@
-package com.pd.demo.service.impl;
+package com.pd.demo.service;
 
-import com.pd.demo.service.IDemoService;
 import com.pd.spring.framework.annotations.PDService;
 
 /**
@@ -11,8 +10,13 @@ import com.pd.spring.framework.annotations.PDService;
 @PDService
 public class DemoService implements IDemoService {
     @Override
-    public String printName(String name) {
+    public String printName(String name,int age) {
 
         return "hello " + name;
+    }
+
+    @Override
+    public String printName_2(String name){
+        return printName(name,20);
     }
 }

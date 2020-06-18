@@ -8,6 +8,7 @@ import com.pd.spring.framework.annotations.PDRequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * @description: spring
@@ -22,7 +23,22 @@ public class DemoController {
 
     @PDRequestMapping(value = "/query")
     public String query(HttpServletRequest request, HttpServletResponse response,
-                        @PDRequestParam String name){
-        return IDemoService.printName(name);
+                        @PDRequestParam("name") String name){
+        try {
+            response.getWriter().write(IDemoService.printName(name,20));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return name;
+    }
+    @PDRequestMapping(value = "/query-2")
+    public String query_2(HttpServletRequest request, HttpServletResponse response,
+                        @PDRequestParam("name") String name){
+        try {
+            response.getWriter().write(IDemoService.printName_2(name));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return name;
     }
 }

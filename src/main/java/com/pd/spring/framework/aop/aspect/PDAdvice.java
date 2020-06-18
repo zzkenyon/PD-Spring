@@ -3,7 +3,7 @@ package com.pd.spring.framework.aop.aspect;
 import java.lang.reflect.Method;
 
 /**
- * 切面
+ * 切面通知
  * @author zhaozhengkang
  * @description
  * @date 2020/4/13 9:22
